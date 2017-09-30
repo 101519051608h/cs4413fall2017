@@ -47,9 +47,6 @@ CREATE TABLE Purchased(
     foreign key (cid) references Customer,
     foreign key ("btitle") references Book
 );
-
-insert into AUTHOR
-    values(1, "Morgan", 60, 
     
 
     
