@@ -24,8 +24,8 @@ CREATE TABLE Customer(
 CREATE TABLE Book(
     "btitle" varchar(20),
     "category" varchar(20),
-    release_year int,
     "edition" int,
+    release_year int,
     tid int,
     primary key("btitle"),
     foreign key (tid) references Translator
