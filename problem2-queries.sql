@@ -1,33 +1,27 @@
 /* 1 */
 select *
 from author;
-
 select *
 from translator;
-
 select *
 from book;
-
 select *
 from wrote;
-
 select * 
 from customer;
-
 select *
 from purchased;
-
+/* 2 */
+(SELECT level, cname
+FROM Customer, Author
+WHERE aname = 'Adams')
 /* 3 */
-
 select "category", "btitle" as "name"
 from book
 where tid in (select tid from translator where tname = 'Mark')
 and "edition" > 10;
-
 /* 4. Find the Authors' names of all books, each of which has more than 2 authors. */
-
 SELECT aname FROM author WHERE aid in (SELECT aid FROM wrote WHERE "btitle" IN (SELECT "btitle" FROM wrote GROUP BY "btitle" HAVING COUNT(*) > 1));
-
 /* 5. Find the names of the translators for whom the combined number of authors for all books that 
 they translated is equal to or more than 2.*/
 select tname
@@ -61,3 +55,10 @@ where catcount >= 2);
 select "category", avg ("edition")
 from BOOK
 group by "category";
+/* 9 */
+update Translator
+set salary = salary * 1.10
+WHERE btitle = 'Beautiful Mind';
+/* 10 */
+DELETE FROM Customer
+WHERE "level" = 'children';
