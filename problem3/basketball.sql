@@ -64,8 +64,8 @@ CREATE TABLE game_stat(
 );
 
 CREATE TABLE reports_to(
-  reporter_id int,
-  reported_to_id int,
+  reporter_id varchar(20),
+  reporter_to_id varchar(20),
   primary key(reporter_id),
   foreign key(reporter_to_id) references head_coach,
   foreign key(reporter_id) references head_coach
