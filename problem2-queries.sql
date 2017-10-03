@@ -12,9 +12,9 @@ from customer;
 select *
 from purchased;
 /* 2 */
-(SELECT level, cname
+SELECT level, cname
 FROM Customer, Author
-WHERE aname = 'Adams')
+WHERE aname = 'Adams';
 /* 3 */
 select "category", "btitle" as "name"
 from book
