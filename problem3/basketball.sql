@@ -18,6 +18,7 @@ CREATE TABLE player(
   last_name varchar(20),
   "position" varchar(20),
   experience int,
+  age int,
   team_name varchar(20),
   contract_amount int,
   contract_length int,
@@ -59,7 +60,7 @@ CREATE TABLE game_stat(
   player_id int,
   "date" date,
   stat varchar(20),
-  primary key("date"),
+  primary key(player_id, "date"),
   foreign key(player_id) references player
 );
 
