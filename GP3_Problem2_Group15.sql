@@ -54,8 +54,9 @@ PACKAGE BODY ASSIGNMENT2_PROCEDURES AS
                                                     FROM
                                                                 (SELECT tid, Count("btitle") as tcount
                                                                 FROM Book
+                                                                WHERE tcount >= 3
                                                                 GROUP BY tid
-                                                                WHERE tcount >= 3))
+                                                                ))
     
                                         then salary * 1.05
                                         else
