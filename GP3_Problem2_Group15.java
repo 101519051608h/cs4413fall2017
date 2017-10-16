@@ -4,7 +4,8 @@ import java.io.InputStreamReader;
 import java.sql.*;
 public class GP3_Problem2_Group15 {
 	public static void main(String[] args) throws IOException, SQLException {
-		String input;
+		//Initialization, nothing of much importance or interest
+		tring input;
 		Connection dbConnection = null;
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
@@ -72,7 +73,8 @@ public class GP3_Problem2_Group15 {
 				cs.executeQuery();
 			}
 			if (input.equalsIgnoreCase("hike")) {
-				dbConnection.prepareCall("{call assignment2_procedures.hike_translators");
+				CallableStatement cs = dbConnection.prepareCall("{call assignment2_procedures.hike_translators");
+				cs.executeQuery();
 			}
 			if (input.equalsIgnoreCase("print")) {
 				ResultSet custResults = stmt.executeQuery("SELECT * FROM CUSTOMER");
