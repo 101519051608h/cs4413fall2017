@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.sql.*;
 public class GP3_Problem2_Group15 {
 	public static void main(String[] args) throws IOException, SQLException {
-		//Initialization, nothing of much importance or interest
+		/* Boring initialization. */
 		String input;
 		Connection dbConnection = null;
 		try {
@@ -28,11 +28,14 @@ public class GP3_Problem2_Group15 {
 		} catch (SQLException e1) {
 			System.err.println("SQLException: " + e1.getMessage());
 		}
-		System.out.println("Type insert to insert a customer, hike to hike translators' wages,"
-				+ " print to view the customer and translator tables, and exit to exit.");
+		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		/* Main loop; mostly self documenting */
+		/* Main loop is mostly self-documenting. I'm collecting input, branching based on it, then 
+		 * jumping into PL/SQL. 
+		 */
 		while(true) {
+			System.out.println("Type insert to insert a customer, hike to hike translators' wages,"
+					+ " print to view the customer and translator tables, and exit to exit.");
 			input = br.readLine();
 			if (input.equalsIgnoreCase("insert")) {
 				//insert
@@ -68,34 +71,41 @@ public class GP3_Problem2_Group15 {
 					System.exit(0);
 				}
 				CallableStatement cs = dbConnection.prepareCall("{call assignment2_procedures.insert_customer(?, ?, ?)");
-				cs.setInt(0, id);
-				cs.setString(1, name);
-				cs.setString(2, level);
+				cs.setInt(1, id);
+				cs.setString(2, name);
+				cs.setString(3, level);
 				cs.executeQuery();
 			}
 			if (input.equalsIgnoreCase("hike")) {
-				CallableStatement cs = dbConnection.prepareCall("{call assignment2_procedures.hike_translators");
+				String aname;
+				System.out.println("What author would you like to particularly boost the translators of?");
+				aname = br.readLine();
+				if (aname.length() > 20) {
+					System.out.print('\n');
+					System.out.println("Please have strings of a length <=20 characters. Exiting the program to avoid"
+							+ " having to put in logic here");
+					System.exit(0);
+				}
+				CallableStatement cs = dbConnection.prepareCall("{call assignment2_procedures.hike_translators(?)");
+				cs.setString(1, aname);
 				cs.executeQuery();
 			}
 			if (input.equalsIgnoreCase("print")) {
 				ResultSet custResults = stmt.executeQuery("SELECT * FROM CUSTOMER");
 				System.out.println("Customer table");
 				System.out.println("ID, Name, amount of orders, and level in that order");
-				boolean going = true;
-				while (going) {
-					System.out.println(custResults.getInt(0) + ' ' + custResults.getString(1) + ' ' +
-							custResults.getInt(2) + ' ' + custResults.getString(3));
-					going = custResults.next();
+				while (custResults.next()) {
+					System.out.println((custResults.getInt(1) - 32) + ' ' + custResults.getString(2) + ' ' +
+							custResults.getInt(3) + ' ' + custResults.getString(4));
 				}
+				//I have no idea why subtracting 32 from IDs is necessary but it is so whatever. 
 				System.out.print('\n');
 				ResultSet transResults = stmt.executeQuery("SELECT * FROM TRANSLATOR");
 				System.out.println("Translator table");
 				System.out.println("ID, Name, and salary in that order");
-				going = true;
-				while (going) {
-					System.out.println(transResults.getInt(0) + ' ' + transResults.getString(1) + ' ' +
-							transResults.getFloat(2));
-					going = transResults.next();
+				while (transResults.next()) {
+					System.out.println((transResults.getInt(1) - 32) + ' ' + transResults.getString(2) + ' ' +
+							transResults.getFloat(3));
 				}
 			}
 			if (input.equalsIgnoreCase("exit")) {
