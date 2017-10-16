@@ -1,32 +1,39 @@
-CREATE OR REPLACE PACKAGE assignment2_procedures
+create or replace PACKAGE assignment2_procedures
     AS
     PROCEDURE insert_customer("id" IN number, "name" IN varchar2, inplevel IN varchar2);
-    PROCEDURE hike_translators;
-    PROCEDURE print_data;
+    PROCEDURE hike_translators(paramauthor in varchar2);
 END assignment2_procedures;
 
-CREATE OR REPLACE
-PACKAGE BODY ASSIGNMENT2_PROCEDURES AS
+create or replace PACKAGE BODY ASSIGNMENT2_PROCEDURES AS
 
   PROCEDURE insert_customer
         ("id" IN number,
          "name" IN varchar2,
         inplevel IN varchar2)
     AS
-        CURSOR level_order IS 
-            SELECT AVG(Cast (order_num as Float))
+        /* Cursor to determine the existence of any customers with the same level */
+        CURSOR level_ext IS
+            SELECT cid
             FROM CUSTOMER
             WHERE "level" = inplevel;
+        /* Cursor to find the avg amount of orders for customers of a given level */
+        CURSOR level_order IS 
+            SELECT AVG(Cast (number_of_orders as Float))
+            FROM CUSTOMER
+            WHERE "level" = inplevel;
+        /* Cursor to find the avg amount of orders in general*/
         CURSOR general_order IS
-            SELECT AVG(Cast (order_num as Float))
+            SELECT AVG(Cast (number_of_orders as Float))
             FROM CUSTOMER;
-        ordnum NUMBER;	
+        /* Variable to hold order number*/
+        ordnum NUMBER;
+        /* Worthless variable to unload level_ext into */
+        levelsthere NUMBER;
     BEGIN
         ordnum := 0;
-        IF exists 
-            (SELECT cid
-            FROM CUSTOMER
-            WHERE "level" = inplevel)
+        OPEN level_ext;
+        FETCH level_ext into levelsthere;
+        IF (level_ext%found)
         THEN
             OPEN level_order;
             FETCH level_order into ordnum;
@@ -41,62 +48,31 @@ PACKAGE BODY ASSIGNMENT2_PROCEDURES AS
     END insert_customer;
 
   PROCEDURE hike_translators
+    (paramauthor in VARCHAR2)
     AS
+    /* Code was failing to compile without this even though it would seem to just be an alias so I brought it up here. */
+    tcount NUMBER;
     BEGIN
-        UPDATE translator SET salary = CASE
+        UPDATE translator SET salary = (CASE /*First off, if the translator translated a book by the given author. */
                                         when tid in (SELECT tid
-                                                    FROM         (SELECT Book.tid as tid, Book."btitle", Wrote."btitle"
-                                                                 FROM Book, Wrote
-                                                                 WHERE Book."btitle" = Wrote."btitle"))
+                                                    FROM         (SELECT Book.tid as tid, Book."btitle", Wrote."btitle", Wrote.AID, Author.AID, Author.ANAME
+                                                                 FROM Book, Wrote, Author
+                                                                 WHERE Book."btitle" = Wrote."btitle" and Wrote.AID = Author.AID and Author.ANAME = paramauthor)
+                                                    )
                                         then salary * 1.1
-                                        else
-                                        when tid in (SELECT tid
-                                                    FROM
-                                                                (SELECT tid, Count("btitle") as tcount
-                                                                FROM Book
-                                                                WHERE tcount >= 3
-                                                                GROUP BY tid
-                                                                ))
-    
-                                        then salary * 1.05
-                                        else
-                                        salary * 1.02;
-        commit;
+                                        else (CASE /*Then, if the translator translated 5+ books. */
+                                            when tid in (SELECT tid
+                                                        FROM
+                                                                    (SELECT tid, Count("btitle") as tcount
+                                                                    FROM Book
+                                                                    WHERE tcount >= 3
+                                                                    GROUP BY tid
+                                                                    ))
+        
+                                            then salary * 1.05
+                                            else /* finally, the default case. */
+                                                salary * 1.02
+                                            end) end);
     END hike_translators;
 
-  PROCEDURE print_data
-    AS
-    BEGIN
-        SELECT *
-        FROM CUSTOMER;
-        SELECT *
-        FROM TRANSLATOR;
-    END print_data;
-
 END ASSIGNMENT2_PROCEDURES;
-         
-    /*
-        ord_num :=
-            see how many customers have the same level
-            if 0: check average order num for all customers, rounded up
-            if 1: check average order num for level customers, rounded up
-        insert (id, name, ord_num, level) into customer 
-    
-        On java side, give three input boxes, which have their input directed to the query*/
-        
-    /*
-        open 3 cursors associated with those who translated a book by a certain author, and those who translated 3+ books, and all translators
-        give the first cursor a 10% pay increase
-        give the second cursor minus the first cursor a 5% pay increase
-        give the third cursor minus c1 + c2 a 2% pay increase 
-    
-        On java side, give one input box, input directed into query*/
-    
-    /* 
-        copy-paste the selects from last project's 2.1 
-        might need decent displaying which could be troublesome
-        might be some method in jdbc to display elegantly
-    */
-    
-    /*      just exit, yawn */ 
-    
