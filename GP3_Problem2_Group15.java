@@ -5,7 +5,7 @@ import java.sql.*;
 public class GP3_Problem2_Group15 {
 	public static void main(String[] args) throws IOException, SQLException {
 		//Initialization, nothing of much importance or interest
-		tring input;
+		String input;
 		Connection dbConnection = null;
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
@@ -31,6 +31,7 @@ public class GP3_Problem2_Group15 {
 		System.out.println("Type insert to insert a customer, hike to hike translators' wages,"
 				+ " print to view the customer and translator tables, and exit to exit.");
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		/* Main loop; mostly self documenting */
 		while(true) {
 			input = br.readLine();
 			if (input.equalsIgnoreCase("insert")) {
