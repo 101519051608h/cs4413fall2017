@@ -1,0 +1,10 @@
+insert into Book values('Jurassic Park', 'Novel', 8, 1984, 101);
+insert into Book values('The Power of Habit', 'Business', 10, 2001, 102);
+insert into Book values('Heidi', 'Children', 9, 1960, 104);
+insert into Book values('Anna Karenina', 'Novel', 20, 1994, 103);
+insert into Book values('War and Peace', 'Novel', 17, 1968, 104);
+insert into Book values('The Lion King', 'Children', 5, 1990, 103);
+insert into Book values('Rich Dad', 'Business', 9, 1997, 103);
+insert into Book values('The Goal', 'Business', 14, 1963, 103);
+insert into Book values('Rework', 'Business', 6, 2003, 102);
+insert into Book values('Beautiful Mind', 'Phycology', 3, 1979, 102);
