@@ -1,0 +1,20 @@
+# Output from Module One
+
+Perry wrote Jurassic Park
+Mark translates Jurassic Park
+OTHER is not supported.
+
+
+PL/SQL procedure successfully completed.
+
+# -------------------------------------
+
+# Output from Module Two
+
+John bought The Lion King
+Wu bought The Lion King
+
+PL/SQL procedure successfully completed.
+
+# -------------------------------------
+
