@@ -1,0 +1,6 @@
+John bought The Lion King
+Wu bought The Lion King
+
+
+PL/SQL procedure successfully completed.
+
